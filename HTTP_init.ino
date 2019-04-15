@@ -11,21 +11,24 @@ void HTTP_init(void) {
 }
 
 void handle_Set_WATER() {
-   _ON1 = HTTP.arg("ON1").toInt();       // Получаем значение ON1 из запроса сохраняем в глобальной переменной
-   _ON2 = HTTP.arg("ON2").toInt();       // Получаем значение ON2 из запроса сохраняем в глобальной переменной
-   _OFF1 = HTTP.arg("OFF1").toInt();       // Получаем значение OFF1 из запроса сохраняем в глобальной переменной
-   _OFF2 = HTTP.arg("OFF2").toInt();       // Получаем значение OFF2 из запроса сохраняем в глобальной переменной
+   _ON1 = HTTP.arg("ON1").toInt()*X;       // Получаем значение ON1 из запроса сохраняем в глобальной переменной
+   _ON2 = HTTP.arg("ON2").toInt()*X;       // Получаем значение ON2 из запроса сохраняем в глобальной переменной
+   _ON3 = HTTP.arg("ON3").toInt()*X;       // Получаем значение ON2 из запроса сохраняем в глобальной переменной
+   _OFF1 = HTTP.arg("OFF1").toInt()*X;       // Получаем значение OFF1 из запроса сохраняем в глобальной переменной
+   _OFF2 = HTTP.arg("OFF2").toInt()*X;       // Получаем значение OFF2 из запроса сохраняем в глобальной переменной
   saveConfig();                        // Функция сохранения данных во Flash пока пустая
   HTTP.send(200, "text/plain", "OK");   // отправляем ответ о выполнении
     Serial.print("ON1 = ");
     Serial.println(_ON1);
     Serial.print("ON2 = ");
     Serial.println(_ON2);
-/*    Serial.print("OFF1 = ");
+    Serial.print("ON3 = ");
+    Serial.println(_ON3);
+    Serial.print("OFF1 = ");
     Serial.println(_OFF1);
     Serial.print("OFF2 = ");
     Serial.println(_OFF2);
-*/
+
 }
 
 //Установка параметров внутренней точки доступа по запросу вида http://192.168.0.101/ssidap?ssidAP=home1&passwordAP=8765439 
@@ -54,16 +57,19 @@ void handle_ConfigJSON() {
   //{"SSDP":"SSDP-test","ssid":"home","password":"i12345678","ssidAP":"WiFi","passwordAP":"","ip":"192.168.0.101"}
   // Имя SSDP
   json += "\"ON1\":\"";
-  json += _ON1;
+  json += _ON1/X;
   // Имя сети
   json += "\",\"ON2\":\"";
-  json += _ON2;
+  json += _ON2/X;
+  // Имя сети
+  json += "\",\"ON3\":\"";
+  json += _ON3/X;
   // Пароль сети
   json += "\",\"OFF1\":\"";
-  json += _OFF1;
+  json += _OFF1/X;
   // Имя точки доступа
   json += "\",\"OFF2\":\"";
-  json += _OFF2;
+  json += _OFF2/X;
   // Имя точки доступа
   json += "\",\"ssidAP\":\"";
   json += _ssidAP;
@@ -74,8 +80,4 @@ void handle_ConfigJSON() {
   
   HTTP.send(200, "text/json", json);
 }
-
-
-
-
 

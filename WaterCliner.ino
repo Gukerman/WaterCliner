@@ -24,13 +24,20 @@ String _ssidAP = "WaterCliner";   // SSID AP точки доступа
 String _passwordAP = "89872595699"; // пароль точки доступа
 //String SSDP_Name = "SendToWeb"; // Имя SSDP
 //int timezone = 3;               // часовой пояс GTM
-long _ON1 = 1800;
-long _OFF1 = 1800;
-long _ON2 = 30;
-long _OFF2 = 30;
+long _ON1 = 1800000;
+long _OFF1 = 1800000;
+long _ON2 = 60000;
+long _OFF2 = 10000;
+long _ON3 = 180000;
 long Time1 = 0;
 long Time2 = 0;
+
 int X=1000;  // Множитель мкс для отладки
+boolean flag1 = true;
+boolean flag2 = true;
+boolean Long = true;
+boolean Full = true;
+
 
 int FullPin = 12;  // Пин реле полного цикла
 int LongPin = 14;  // Пин реле короткого цикла
@@ -42,7 +49,9 @@ void setup() {
   Serial.println("");
   pinMode(FullPin, OUTPUT);
   pinMode(LongPin, OUTPUT);
-  
+  digitalWrite(FullPin, 0);        // выключаем реле   
+  digitalWrite(LongPin, 0);        // выключаем реле  
+
   //Запускаем файловую систему
   Serial.println("Start 4-FS");
   FS_init();
@@ -63,18 +72,60 @@ void setup() {
 void loop() {
   HTTP.handleClient();
   delay(1);
+  
   // Full cycle
-  if(millis()-Time1 > _ON1*X) 
+  if (flag1)
   {
-    Time1 = millis();
-    digitalWrite(FullPin, !digitalRead(FullPin));        // то переключаем реле
+        if ((flag2==true)&&(millis()-Time2 > _ON2 )) 
+          {
+          Time2 = millis();
+          Long = 1;
+          //digitalWrite(LongPin, 1);        // то переключаем реле
+          flag2 = false;
+          }
+          
+        if ((flag2==false)&&(millis()-Time2 > _OFF2 )) 
+          {
+          Time2 = millis();
+          Long = 0;
+          //digitalWrite(LongPin, 0);        // то переключаем реле
+          flag2 = true;
+          }      
+          
+        if (millis()-Time1 > _ON1 )
+          {
+            Time1 = millis();
+            Full = 1;
+            //digitalWrite(FullPin, 1);        // то переключаем реле
+            flag1 = false;
+          }
+          
+        if (millis()-Time1 > _ON1 - _ON3) 
+          {
+          Long = 0;
+          //digitalWrite(LongPin, 0);        // то переключаем реле
+          }            
   }
-  // Long cycle
-  if(millis()-Time2 > _ON2*X) 
+  else   
   {
-    Time2 = millis();
-    digitalWrite(LongPin, !digitalRead(LongPin));        // то переключаем реле
-  }        
+  if (millis()-Time1 > _OFF1 )
+      {
+        Time1 = millis();
+        Full = 0;
+        //digitalWrite(FullPin, 0);        // то переключаем реле
+        flag1 = true;
+      }    
+      else
+      {
+       Long = 1;
+       //digitalWrite(LongPin, 1);        // то переключаем реле
+       flag2 = true;
+      }
+  }
+
+ digitalWrite(LongPin, Long);        // то переключаем реле
+ digitalWrite(FullPin, Full);        // то переключаем реле
+  
 }
 
 

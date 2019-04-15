@@ -29,9 +29,14 @@ bool loadConfig() {
       
     _ON1 = root["ON1"];               // Так получаем число
     _ON2 = root["ON2"];               // Так получаем число
+    _ON3 = root["ON3"];               // Так получаем число
     _OFF1 = root["OFF1"];               // Так получаем число
     _OFF2 = root["OFF2"];               // Так получаем число
-
+    _ON1 = _ON1 * X;
+    _ON2 = _ON2 * X;
+    _ON3 = _ON3 * X;
+    _OFF1 = _OFF1 * X;
+    _OFF2 = _OFF2* X;
     return true;
     
 
@@ -47,10 +52,11 @@ bool saveConfig() {
   json["ssidAPName"] = _ssidAP;
   json["ssidAPPassword"] = _passwordAP;
     
-  json["ON1"] = _ON1;  
-  json["ON2"] = _ON2;  
-  json["OFF1"] = _OFF1;  
-  json["OFF2"] = _OFF2;  
+  json["ON1"] = _ON1/X;  
+  json["ON2"] = _ON2/X;  
+  json["ON3"] = _ON3/X;  
+  json["OFF1"] = _OFF1/X;  
+  json["OFF2"] = _OFF2/X;  
   
   // Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
   json.printTo(jsonConfig);

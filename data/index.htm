@@ -32,7 +32,7 @@
    }
    
     function set_WATER(submit){
-    server = "/WATER?ON1="+val('ON1')+"&ON2="+val('ON2') //+"&OFF1="+val('OFF1')+"&OFF2="+val('OFF2')
+    server = "/WATER?ON1="+val('ON1')+"&ON2="+val('ON2')+"&ON3="+val('ON3')+"&OFF1="+val('OFF1')+"&OFF2="+val('OFF2')
     send_request(submit,server);
     //alert("Измененя вступят в силу после перезагрузки. Пожалуйта перезагрузите устройство.");
    }
@@ -55,16 +55,28 @@
     <div class="col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
      <h5 class="alert-info">Настройки</h5>
      <hr>
-     <div class="alert alert-dismissible alert-warning"><strong>Указывается время в секундах, которое должен быть контакт выключен или выключен, Например 30 минут включен = 1800 сек. Потом столько же будет ваыключен. После окончания таймера выключения, заново запускается таймер на включение и так по кругу. Короткий цикл аналогично но второй выход.</div>
+     <div class="alert alert-dismissible alert-warning"><strong>Указывается два значения времи в секундах. Длительность времени когда контакт открыт и вторая строка когда закрыт.</div>
 
-     <h2>Длительность полного цикла</h2>
-     <input id="ON1" value="{{ON1}}" class="form-control" pattern="[0-9]{1,6}" placeholder="Включение длинный">
+     <h2>Длительность цикла слива воды</h2>
+     <h3>Открыто</h3>
+     <input id="ON1" value="{{ON1}}" class="form-control" pattern="[0-9]{1,6}" placeholder="Открыто слив">
+     <h3>Закрыто</h3>
+     <input id="OFF1" value="{{OFF1}}" class="form-control" pattern="[0-9]{1,6}" placeholder="Закрыто слив">
 
-     <h2>Длительность микроцикла</h2>
-     <input id="ON2" value="{{ON2}}" class="form-control" pattern="[0-9]{1,6}" placeholder="Включение длинный">
-     <input class="btn btn-block btn-success" value="Сохранить" onclick="set_WATER(this);" type="submit">
+     <h2>Длительность цикла подачи воздуха</h2>
+     <h3>Открыто</h3>
+     <input id="ON2" value="{{ON2}}" class="form-control" pattern="[0-9]{1,6}" placeholder="Открыто воздух">
+     <h3>Закрыто</h3>
+     <input id="OFF2" value="{{OFF2}}" class="form-control" pattern="[0-9]{1,6}" placeholder="Закрыто воздух">
+     
+	 <h2>Длительность продувки компрессора</h2>
+     <input id="ON3" value="{{ON3}}" class="form-control" pattern="[0-9]{1,6}" placeholder="Компрессор">
      <hr>
-	 
+
+	 <input class="btn btn-block btn-success" value="Сохранить" onclick="set_WATER(this);" type="submit">
+  
+     <hr>
+  
 	 <h2>Точка доступа</h2>
      <div class="row">
       <div class="col-sm-6">
